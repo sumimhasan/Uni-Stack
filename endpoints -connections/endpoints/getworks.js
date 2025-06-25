@@ -1,14 +1,8 @@
-const express = require('express');
-const { findDocuments } = require('./mongoHelper'); // Your helper module
 const mongoose = require('mongoose');
+const { findDocuments } = require('./mongoHelper'); // Your helper module
 
-const router = express.Router();
-
-// Define the schema for a work item
-
-
-// GET /works/:userId - Get all works for a user
-router.get('/works/:userId', async (req, res) => {
+// Handler for GET /works/:userId
+async function getUserWorksHandler(req, res) {
     const { userId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -16,12 +10,15 @@ router.get('/works/:userId', async (req, res) => {
     }
 
     try {
-        const works = await findDocuments('works', workSchema, { userId });
+        // If you have a schema to pass to findDocuments, add it here; else pass null or adjust helper
+        const works = await findDocuments('works', null, { userId });
         return res.json({ works });
     } catch (err) {
         console.error('Error fetching works:', err.message);
         res.status(500).json({ error: 'Server error' });
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    getUserWorksHandler
+};

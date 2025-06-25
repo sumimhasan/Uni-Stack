@@ -1,12 +1,6 @@
 const jwt = require('jsonwebtoken');
-const express = require('express');
 const { findDocumentOneSQL } = require('./your-sql-db-file'); // Update with actual filename
-const { DataTypes } = require('sequelize');
-
-const router = express.Router();
 const JWT_SECRET = 'your_secret_key'; // Replace with a secure secret key
-
-// Schema for user table (example)
 
 // Middleware to check for JWT token
 async function tokenMiddleware(req, res, next) {
@@ -27,8 +21,8 @@ async function tokenMiddleware(req, res, next) {
     }
 }
 
-// Login route
-router.post('/login', tokenMiddleware, async (req, res) => {
+// Handler for login route
+async function loginHandler(req, res) {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -36,7 +30,8 @@ router.post('/login', tokenMiddleware, async (req, res) => {
     }
 
     try {
-        const user = await findDocumentOneSQL('users', userSchema, { email });
+        // Replace 'userSchema' with your actual schema if needed or remove it if not used
+        const user = await findDocumentOneSQL('users', null, { email });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
@@ -54,6 +49,9 @@ router.post('/login', tokenMiddleware, async (req, res) => {
         console.error('Login error:', err.message);
         res.status(500).json({ error: 'Server error' });
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    tokenMiddleware,
+    loginHandler
+};

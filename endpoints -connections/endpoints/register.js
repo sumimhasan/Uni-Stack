@@ -1,10 +1,8 @@
-const express = require('express');
 const { findDocumentOne, createDocument } = require('./mongoHelper'); // Replace with your actual helper filename
 const userSchema = require('./userSchema');
 
-const router = express.Router();
-
-router.post('/register', async (req, res) => {
+// Handler for POST /register
+async function registerHandler(req, res) {
     const { email, password } = req.body;
 
     if (!email || !password)
@@ -25,6 +23,8 @@ router.post('/register', async (req, res) => {
         console.error('Registration error:', err.message);
         res.status(500).json({ error: 'Server error.' });
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    registerHandler
+};
