@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const router = require('./routes'); // Import main router
+const router = require('endpoint-router-path'); // Import main router
 
 app.use(express.json());
 
